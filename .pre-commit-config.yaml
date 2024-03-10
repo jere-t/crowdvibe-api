@@ -1,0 +1,36 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: local
+    hooks:
+      - id: isort
+        entry: poetry run isort
+        name: isort (python)
+        language: system
+        types: [python]
+        require_serial: true
+        files: \.py$
+        args: ["--profile", "black"]
+      - id: black
+        name: black
+        entry: poetry run black
+        language: system
+        types: [python]
+        require_serial: true
+      - id: end-of-file-fixer
+        name: Fix End of Files
+        entry: poetry run end-of-file-fixer
+        language: system
+        types: [text]
+        stages: [commit, push, manual]
+      - id: flake8
+        name: flake8
+        entry: poetry run flake8
+        language: system
+        types: [python]
+        require_serial: true
+      - id: trailing-whitespace
+        name: Trim Trailing Whitespace
+        entry: poetry run trailing-whitespace-fixer
+        language: system
+        types: [text]
+        stages: [commit, push, manual]

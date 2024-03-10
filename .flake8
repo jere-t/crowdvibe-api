@@ -1,0 +1,11 @@
+# .flake8
+[flake8]
+docstring-convention = google
+ignore = E133, E203, E266, E501, W503, F403, E401, F401
+import-order-style = google
+max-line-length = 79
+max-complexity = 18
+exclude = __init__.py
+per-file-ignores =
+    tests/*:S101,ANN, S105, S106, D101, D415, D100, D103, D202, D403, I202, S311, I201, I100
+select = B,C,E,F,W,T4,B9
