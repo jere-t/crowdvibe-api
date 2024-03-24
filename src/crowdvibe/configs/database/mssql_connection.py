@@ -1,13 +1,12 @@
 import logging
 from typing import Self, Optional, Tuple, List
 
-import psycopg2
-from psycopg2.extras import RealDictCursor
+import pyodbc
 
 from crowdvibe.configs.database.database_connection import DatabaseConnection
 
 
-class PostgresConnection(DatabaseConnection):
+class MssqlConnection(DatabaseConnection):
 
     def connect(self) -> Self:
         """
@@ -16,13 +15,12 @@ class PostgresConnection(DatabaseConnection):
         :return: A connection object representing the database connection.
 
         """
-        return psycopg2.connect(
+        return pyodbc.connect(
             host=self.host,
             database=self.schema,
             user=self.user,
             password=self.password,
             port=self.port,
-            cursor_factory=RealDictCursor,
         )
 
     def cursor(self):
@@ -66,5 +64,5 @@ class PostgresConnection(DatabaseConnection):
                 cursor.executemany(query, values)
                 self.connection.commit()
                 logging.info("Transaction executed successfully.")
-        except psycopg2.Error as e:
+        except pyodbc.Error as e:
             logging.error(f"Error executing transaction: {e}")

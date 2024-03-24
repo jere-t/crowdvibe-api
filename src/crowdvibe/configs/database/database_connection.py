@@ -78,6 +78,20 @@ class DatabaseConnection(ABC):
         """
         pass
 
+    def execute_transactions(self, query: str, values: List[Tuple]):
+        """
+        Executes transactions on the database.
+
+        This method must be implemented by subclasses.
+
+        :param query: The SQL query to execute.
+        :param values: A list of tuples containing the parameter values for the query.
+        :return: None
+
+        raises: db.Error: If an error occurs during the transaction execution.
+        """
+        pass
+
     @retry(stop=stop_after_attempt(3), wait=wait_fixed(2), retry=retry_if_exception_type(Exception))
     def __enter__(self) -> Any:
         """
@@ -91,16 +105,17 @@ class DatabaseConnection(ABC):
             logging.info("Database connection was successful!")
             return self.cursor()
         except Exception as e:
-            logging.error(f"{e}")
+            logging.error(f"Database connection error: {e}")
             raise
 
     def __exit__(self, exc_type, exc_value, traceback) -> None:
         """
-        Context management method for exiting the context.
+        Exits the context for database connection.
 
-        This method is called when exiting the context, whether the context was
-        exited normally or due to an exception.
-
+        Args:
+            exc_type: Exception type (if any).
+            exc_value: Exception value (if any).
+            traceback: Traceback information (if any).
         """
         try:
             if self.connection is not None:
